@@ -82,9 +82,17 @@ Once the config is ready you can run the file with:
 ```
 python vthunting.py --help
 ```
+```
+usage: vthunting.py [OPTION]
+    -h, --help              Print this help
+    -r, --report            Print the VT hunting report
+    -s, --slack_report      Send the report to a Slack channel
+    -e, --email_report      Send the report by email
+    -t, --telegram_report   Send the report to Telegram
+```
 
 ### Prerequisites
-##### Requirements
+#####Requirements
 You first need to install the requirement:
 * requests
 * slackclient
