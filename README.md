@@ -92,7 +92,7 @@ usage: vthunting.py [OPTION]
 ```
 
 ### Prerequisites
-##### Requirements
+#### Requirements
 You first need to install the requirement:
 * requests
 * slackclient
@@ -100,16 +100,16 @@ You first need to install the requirement:
 ```
 pip install -r requirements.txt
 ```
-##### VT API
+#### VT API
 Get your API key from Virus Total. https://developers.virustotal.com/v3.0/reference
 
-##### Email Configuration (gmail)
+#### Email Configuration (gmail)
 To create an app you can find the documentation here: https://support.google.com/accounts/answer/185833
 
-##### Slack Bot Configuration
+#### Slack Bot Configuration
 To generate a token you need to go here and follow the step: https://api.slack.com/custom-integrations/legacy-tokens
 
-##### Telegram Bot Configuration
+#### Telegram Bot Configuration
 To get a token you need to create a Telegram bot by talking to @BotFather, it will help you to configure your bot and 
 get your token. 
 Once you get your token visit https://api.telegram.org/bot<YOUR_TOKEN>/getUpdates to get the channel id.
