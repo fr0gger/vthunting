@@ -82,6 +82,7 @@ def usage():
     -s, --slack_report      Send the report to a Slack channel
     -e, --email_report      Send the report by email
     -t, --telegram_report   Send the report to Telegram
+    -j, --json              Print report in json format
     ''')
 
 
@@ -142,6 +143,7 @@ def api_request():
     response = requests.get(vturl, headers=headers)
     result = json.loads(response.text)
 
+    # print result
     report = ["Latest report from " + str(now),
               "-------------------------------------------------------------------------------------"]
 
@@ -162,7 +164,7 @@ def api_request():
     report.append(end_message)
     report = ("\n".join(report))
 
-    return report
+    return report, result
 
 
 def main():
@@ -171,15 +173,15 @@ def main():
     print("\tGet latest hunting notification from VirusTotal\n")
 
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "hrset",
-                                   ["help", "report", "slack_report", "email_report", "telegram_report"])
+        opts, args = getopt.getopt(sys.argv[1:], "hrsetj",
+                                   ["help", "report", "slack_report", "email_report", "telegram_report", "json"])
     except getopt.GetoptError as err:
         print(err)
         usage()
         sys.exit(2)
 
     try:
-        report = api_request()
+        report, result_json = api_request()
     except(ConnectionError, ConnectTimeout, KeyError) as e:
         print("[!] Error with the VT API: " + str(e))
         sys.exit()
@@ -196,6 +198,8 @@ def main():
             send_email_report(report)
         elif o in ("-t", "--telegram_report"):
             send_telegram_report(report)
+        elif o in ("-j", "--json"):
+            print json.dumps(result_json, sort_keys=True, indent=4)
 
 
 if __name__ == '__main__':
