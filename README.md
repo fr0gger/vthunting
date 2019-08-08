@@ -17,7 +17,7 @@ The below extract is an example of generated report.
                                                     |___/ 
         
             McAfee ATR | Thomas Roccia | @fr0gger_
-        Get latest hunting notification from VirusTotal
+        Get latest hunting notification from VirusTotal 
 
 
 Latest report from 2018-12-24 10:20:30.158831
