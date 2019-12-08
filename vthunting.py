@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """Virus Total Hunting Notification version 1.0
 This tiny python script allows you to setup daily report about virustotal hunting notification.
-You can send the report by email, to telegram or slack.
+You can send the report by email, to telegram or slack and export the result in JSON.
 
 Usage:
 python vthunting.py [options]
