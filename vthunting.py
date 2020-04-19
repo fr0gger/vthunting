@@ -148,15 +148,15 @@ def api_request():
               "-------------------------------------------------------------------------------------"]
 
     for json_row in result['data']:
-        subject = json_row["attributes"]["subject"]
+        subject = json_row["attributes"]["rule_name"]
         date = json_row["attributes"]["date"]
         tags = json_row["attributes"]["tags"]
-        sha2 = re.search(regex, str(tags)).group()
+        sha2 = json_row["attributes"]["tags"][0]
         tags.remove(sha2)
 
         report.append("Rule name: " + subject)
         report.append("Match date: " + datetime.utcfromtimestamp(date).strftime('%d/%m/%Y %H:%M:%S'))
-        report.append("SHA256: " + sha2)
+        report.append("SHA256: " + str(sha2))
         report.append("Tags: " + str([str(tags) for tags in tags]).replace("'", ""))
 
         report.append("-------------------------------------------------------------------------------------")
