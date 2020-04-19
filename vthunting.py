@@ -151,7 +151,7 @@ def api_request():
         subject = json_row["attributes"]["rule_name"]
         date = json_row["attributes"]["date"]
         tags = json_row["attributes"]["tags"]
-        sha2 = json_row["attributes"]["tags"][0]
+        sha2 = re.search(regex, str(tags)).group()
         tags.remove(sha2)
 
         report.append("Rule name: " + subject)
