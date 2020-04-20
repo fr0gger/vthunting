@@ -89,6 +89,7 @@ usage: vthunting.py [OPTION]
     -s, --slack_report      Send the report to a Slack channel
     -e, --email_report      Send the report by email
     -t, --telegram_report   Send the report to Telegram
+    -j, --json              Get full JSON report
 ```
 
 ### Prerequisites
