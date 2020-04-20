@@ -1,5 +1,6 @@
 # VT Hunting
                                                     
+VThunting is now featured on [VirusTotal](https://support.virustotal.com/hc/en-us/articles/360006819798-API-Scripts-and-client-libraries).
 Virus Total Hunting is a tiny tool based on the VT api version 3 to run daily, weekly or monthly report about malware hunting. 
 The report can be send via email, Slack channel or Telegram. The tool can also be used in cli to get a report anytime. 
 The default number of result is 10 but it can be increase or decrease in the config part. 
