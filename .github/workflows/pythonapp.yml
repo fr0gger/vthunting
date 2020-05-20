@@ -32,13 +32,13 @@ jobs:
         gmail_pass = "<APP_PASS>"  # pass from APP 
         gmail_dest = "<DEST_EMAIL>"
 
-       # Slack Bot config
-       SLACK_BOT_TOKEN = "<API>"
-       SLACK_CHANNEL = "<SLACK_CHANNEL>"
+        # Slack Bot config
+        SLACK_BOT_TOKEN = "<API>"
+        SLACK_CHANNEL = "<SLACK_CHANNEL>"
 
-       # Telegram Bot config
-       TOKEN = "<API>"
-       chat_id = "<CHAT_ID>"
+        # Telegram Bot config
+        TOKEN = "<API>"
+        chat_id = "<CHAT_ID>"
     - name: Run Script
       run: |
         python vthunting.py --help
