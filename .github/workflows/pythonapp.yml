@@ -15,6 +15,7 @@ jobs:
     - name: Install dependencies
       run: |
         pip3 install slackclient
+        pip3 install requests
     - name: Run Script
       run: |
         python vthunting.py --help
