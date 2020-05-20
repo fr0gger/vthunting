@@ -199,7 +199,7 @@ def main():
         elif o in ("-t", "--telegram_report"):
             send_telegram_report(report)
         elif o in ("-j", "--json"):
-            print json.dumps(result_json, sort_keys=True, indent=4)
+            print(json.dumps(result_json, sort_keys=True, indent=4))
 
 
 if __name__ == '__main__':
