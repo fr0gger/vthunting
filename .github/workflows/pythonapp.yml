@@ -1,0 +1,44 @@
+# This workflow will install Python dependencies, run tests and lint with a single version of Python
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
+on: [push]
+name: VTHunting
+
+jobs:
+  get_vt_notifications:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python 3.8
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.8
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install
+        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+    - name: Configure API
+      run: |
+        # Virus Total API
+        VTAPI = "<API_KEY>"
+        number_of_result = "" # 10 by default
+
+        # Email configuration 
+        smtp_serv = "<SMTP_SERV>"
+        smtp_port = ""
+        gmail_login = "<EMAIL>"
+        gmail_pass = "<APP_PASS>"  # pass from APP 
+        gmail_dest = "<DEST_EMAIL>"
+
+       # Slack Bot config
+       SLACK_BOT_TOKEN = "<API>"
+       SLACK_CHANNEL = "<SLACK_CHANNEL>"
+
+       # Telegram Bot config
+       TOKEN = "<API>"
+       chat_id = "<CHAT_ID>"
+    - name: Run Script
+      run: |
+        python vthunting.py --help
