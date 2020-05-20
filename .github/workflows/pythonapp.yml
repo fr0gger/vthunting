@@ -7,7 +7,6 @@ jobs:
   get_vt_notifications:
 
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python 3.8
