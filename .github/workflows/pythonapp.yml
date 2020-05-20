@@ -14,8 +14,7 @@ jobs:
         python-version: 3.8
     - name: Install dependencies
       run: |
-        pip3 install slackclient
-        pip3 install requests
+        pip3 install slackclient requests
     - name: Run Script
       run: |
         python vthunting.py --help
