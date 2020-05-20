@@ -191,7 +191,7 @@ def main():
             usage()
             sys.exit()
         elif o in ("-r", "--report"):
-            print report
+            print(report)
         elif o in ("-s", "--slack_report"):
             send_slack_report(report)
         elif o in ("-e", "--email_report"):
