@@ -1,2 +1,2 @@
 requests
-slackclient
+slackclient==1.0.7
