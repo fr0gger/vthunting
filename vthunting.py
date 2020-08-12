@@ -18,6 +18,7 @@ import re
 import smtplib
 import getopt
 import sys
+import sqlite3
 from requests import *
 from datetime import datetime
 from slackclient import SlackClient
@@ -72,6 +73,8 @@ now = dt.datetime.now()
 headers = {"x-apikey": VTAPI}
 regex = "[A-Fa-f0-9]{64}"  # Detect SHA256
 end_message = "From fr0gger with <3"
+report_only_unseen_hashes = False
+database_connection = sqlite3.connect('vthunting.sqlite')
 
 
 # Print help
@@ -138,6 +141,36 @@ def send_email_report(report):
         sys.exit()
 
 
+def initialize_vthunting_database():
+    sql = """
+    CREATE TABLE IF NOT EXISTS seen_sha256_hashes (
+    sha256 text constraint seen_sha256_hashes_pk primary key,
+    notification_date int
+    );"""
+    try:
+        database_connection.execute(sql)
+    except Exception as e:
+        print("[!] Error with creating the table in the SQLite3 database: " + str(e))
+        sys.exit()
+    finally:
+        database_connection.commit()
+
+def is_notified_on_before(sha256):
+    return bool(database_connection.execute(
+        'SELECT EXISTS ( SELECT sha256 FROM seen_sha256_hashes WHERE sha256 = ?)', [str(sha256)]).fetchone()[0])
+
+
+def mark_as_notified_on_before(sha256, notification_date):
+    if not is_notified_on_before(sha256):
+        try:
+            database_connection.execute('INSERT INTO seen_sha256_hashes (sha256, notification_date) values (?, ?)', [str(sha256), int(notification_date)])
+        except Exception as e:
+            print("[!] Error with storing the hash in the SQLite3 database: " + str(e))
+            sys.exit()
+        finally:
+            database_connection.commit()
+
+
 # Connect to VT
 def api_request():
     response = requests.get(vturl, headers=headers)
@@ -154,12 +187,15 @@ def api_request():
         sha2 = re.search(regex, str(tags)).group()
         tags.remove(sha2)
 
-        report.append("Rule name: " + subject)
-        report.append("Match date: " + datetime.utcfromtimestamp(date).strftime('%d/%m/%Y %H:%M:%S'))
-        report.append("SHA256: " + str(sha2))
-        report.append("Tags: " + str([str(tags) for tags in tags]).replace("'", ""))
+        if not report_only_unseen_hashes or not is_notified_on_before(sha2):
+            mark_as_notified_on_before(sha2, date)
 
-        report.append("-------------------------------------------------------------------------------------")
+            report.append("Rule name: " + subject)
+            report.append("Match date: " + datetime.utcfromtimestamp(date).strftime('%d/%m/%Y %H:%M:%S'))
+            report.append("SHA256: " + str(sha2))
+            report.append("Tags: " + str([str(tags) for tags in tags]).replace("'", ""))
+
+            report.append("-------------------------------------------------------------------------------------")
 
     report.append(end_message)
     report = ("\n".join(report))
@@ -179,6 +215,8 @@ def main():
         print(err)
         usage()
         sys.exit(2)
+
+    initialize_vthunting_database()
 
     try:
         report, result_json = api_request()
@@ -200,6 +238,8 @@ def main():
             send_telegram_report(report)
         elif o in ("-j", "--json"):
             print(json.dumps(result_json, sort_keys=True, indent=4))
+
+    database_connection.close()
 
 
 if __name__ == '__main__':
