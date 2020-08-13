@@ -43,8 +43,9 @@ __asciiart__ = '''
 # -----------------------------------------------------------------------
 # Virus Total Intelligence API
 VTAPI = ""
-number_of_result = ""  # 10 by default
-vturl = 'https://www.virustotal.com/api/v3/intelligence/hunting_notifications?cursor=&limit=' + number_of_result
+number_of_result = ""  # fetch this many notifications per API request. 10 by default, 40 max
+max_notifications = None  # fetch this many notifications in total
+vturl = 'https://www.virustotal.com/api/v3/intelligence/hunting_notifications'
 
 # Create an APP on gmail if you are using double authentication https://support.google.com/accounts/answer/185833
 smtp_serv = ""
@@ -140,14 +141,45 @@ def send_email_report(report):
 
 # Connect to VT
 def api_request():
-    response = requests.get(vturl, headers=headers)
-    result = json.loads(response.text)
+    fetch_more_notifications = True
+    limit = 10
+    notifications = []
+
+    if number_of_result:
+        limit = int(number_of_result)
+    if max_notifications and max_notifications < limit:
+        limit = max_notifications
+
+    params = {
+        'limit': limit
+    }
+
+    while fetch_more_notifications:
+        response = requests.get(vturl, params=params, headers=headers)
+        result = json.loads(response.text)
+
+        for json_row in result['data']:
+            notifications.append(json_row)
+
+        # Response has cursor, more notifications can be fetched
+        if 'cursor' in result['meta'].keys():
+            params.update({'cursor': result['meta']['cursor']})
+
+            if max_notifications:
+                # reached limit, stop fetching more notifications
+                if len(notifications) == max_notifications:
+                    fetch_more_notifications = False
+                # limit amount of notifications to fetch on next iteration, to reach max
+                elif len(notifications) + limit > max_notifications:
+                    params.update({'limit': max_notifications - len(notifications)})
+        else:
+            fetch_more_notifications = False
 
     # print result
     report = ["Latest report from " + str(now),
               "-------------------------------------------------------------------------------------"]
 
-    for json_row in result['data']:
+    for json_row in notifications:
         subject = json_row["attributes"]["rule_name"]
         date = json_row["attributes"]["date"]
         tags = json_row["attributes"]["tags"]
@@ -164,7 +196,7 @@ def api_request():
     report.append(end_message)
     report = ("\n".join(report))
 
-    return report, result
+    return report, notifications
 
 
 def main():
