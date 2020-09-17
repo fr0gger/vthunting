@@ -78,6 +78,9 @@ SLACK_CHANNEL = "<SLACK_CHANNEL>"
 # Telegram Bot config
 TOKEN = "<API>"
 chat_id = "<CHAT_ID>"
+
+# Microsoft Teams Bot config
+TEAMS_CHANNEL_WEBHOOK = ""
 ```
 
 Once the config is ready you can run the file with:
@@ -91,6 +94,7 @@ usage: vthunting.py [OPTION]
     -s, --slack_report      Send the report to a Slack channel
     -e, --email_report      Send the report by email
     -t, --telegram_report   Send the report to Telegram
+    -m, --teams_report      Send the report to Microsoft Teams
     -j, --json              Get full JSON report
 ```
 
@@ -99,6 +103,7 @@ usage: vthunting.py [OPTION]
 You first need to install the requirement:
 * requests
 * slackclient
+* pymsteams
 
 ```
 pip install -r requirements.txt
@@ -116,6 +121,10 @@ To generate a token you need to go here and follow the step: https://api.slack.c
 To get a token you need to create a Telegram bot by talking to @BotFather, it will help you to configure your bot and 
 get your token. 
 Once you get your token visit https://api.telegram.org/bot<YOUR_TOKEN>/getUpdates to get the channel id.
+
+#### Microsoft Teams Bot Configuration
+Add a webhook connector to the Microsoft Teams Channel that you'd like to receive the reports.
+https://docs.microsoft.com/en-us/microsoftteams/platform/webhooks-and-connectors/how-to/connectors-using#setting-up-a-custom-incoming-webhook
 
 ### Install in your system
 

@@ -8,7 +8,7 @@ Usage:
 python vthunting.py [options]
 
 Install:
-pip install requests slackclient==1.0.7
+pip install requests slackclient==1.0.7 pymsteams
 """
 
 import requests
