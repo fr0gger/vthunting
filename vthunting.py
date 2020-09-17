@@ -19,6 +19,7 @@ import smtplib
 import getopt
 import sys
 import sqlite3
+import pymsteams
 from requests import *
 from datetime import datetime
 from slackclient import SlackClient
@@ -67,6 +68,9 @@ SLACK_CHANNEL = ""
 TOKEN = ""
 chat_id = ""
 telurl = "https://api.telegram.org/bot{}/".format(TOKEN)
+
+# Microsoft Teams Bot config
+TEAMS_CHANNEL_WEBHOOK = ""
 # -----------------------------------------------------------------------
 
 # Global Variable
@@ -86,6 +90,7 @@ def usage():
     -s, --slack_report      Send the report to a Slack channel
     -e, --email_report      Send the report by email
     -t, --telegram_report   Send the report to Telegram
+    -m, --teams_report      Send the report to Microsoft Teams
     -j, --json              Print report in json format
     ''')
 
@@ -118,6 +123,16 @@ def send_telegram_report(report):
 
     else:
         print("[!] Connection to Telegram failed! Check your token or chat id.")
+
+# Posting to a Microsoft Teams channel
+def send_teams_report(report):
+    try:
+        teams_message = pymsteams.connectorcard(TEAMS_CHANNEL_WEBHOOK)
+        teams_message.text(report)
+        teams_message.send()
+        print("[*] Report has been sent to Microsoft Teams!")
+    except:
+        print("[!] Sending to Microsoft Teams failed!")
 
 
 # Send email report
@@ -241,8 +256,8 @@ def main():
     print("\tGet latest hunting notification from VirusTotal\n")
 
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "hrsetj",
-                                   ["help", "report", "slack_report", "email_report", "telegram_report", "json"])
+        opts, args = getopt.getopt(sys.argv[1:], "hrsetmj",
+                                   ["help", "report", "slack_report", "email_report", "telegram_report", "teams_report", "json"])
     except getopt.GetoptError as err:
         print(err)
         usage()
@@ -268,6 +283,8 @@ def main():
             send_email_report(report)
         elif o in ("-t", "--telegram_report"):
             send_telegram_report(report)
+        elif o in ("-m", "--teams_report"):
+            send_teams_report(report)
         elif o in ("-j", "--json"):
             print(json.dumps(result_json, sort_keys=True, indent=4))
 
