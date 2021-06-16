@@ -20,6 +20,7 @@ import getopt
 import sys
 import sqlite3
 import pymsteams
+import os
 from requests import *
 from datetime import datetime
 from slackclient import SlackClient
@@ -44,7 +45,7 @@ __asciiart__ = '''
 #                       UPDATE WITH YOUR PERSONAL INFO
 # -----------------------------------------------------------------------
 # Virus Total Intelligence API
-VTAPI = ""
+VTAPI = os.environ.get('VTAPI')
 number_of_result = ""  # fetch this many notifications per API request. 10 by default, 40 max
 max_notifications = None  # fetch this many notifications in total
 vturl = 'https://www.virustotal.com/api/v3/intelligence/hunting_notifications'
