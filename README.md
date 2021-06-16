@@ -157,7 +157,7 @@ Below is an example to receive the report every day at 10:15am.
 ```
 
 ## Using docker
-Git cloen the repo and configure your API for the reporting in the script. 
+Git clone the repo and configure your API for the reporting in the script. 
 Add your VirusTotal API in the dockerfile. 
 
 Then run the following commands:
