@@ -162,6 +162,7 @@ Add your VirusTotal API in the dockerfile.
 
 Then run the following commands:
 ```
+# Build the container
 docker build -t vthunting:latest .
 
 # run the script:
