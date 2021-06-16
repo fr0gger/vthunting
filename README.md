@@ -156,6 +156,18 @@ Below is an example to receive the report every day at 10:15am.
 15 10  * * * /usr/local/bin/vthunting -r -t -e -s >> vthunt.log
 ```
 
+## Using docker
+Git cloen the repo and configure your API for the reporting in the script. 
+Add your VirusTotal API in the dockerfile. 
+
+Then run the following commands:
+```
+docker build -t vthunting:latest .
+
+# run the script:
+docker run -t vthunting -r
+```
+
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
