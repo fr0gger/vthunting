@@ -5,4 +5,4 @@ ENV VTAPI=
 COPY requirements.txt requirements.txt
 RUN pip install -r requirements.txt
 COPY . .
-ENTRYPOINT ["python", "vthunti
+ENTRYPOINT ["python", "vthunting.py"]
