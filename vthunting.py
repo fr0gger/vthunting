@@ -113,17 +113,23 @@ def send_slack_report(report):
         print("[!] Connection failed! Exception traceback printed above.")
         sys.exit()
 
+# Split message to chunks
+def split_message(message, chunk_size):
+    return [message[i:i + chunk_size] for i in range(0, len(message), chunk_size)]
 
 # Posting to a Telegram channel
 def send_telegram_report(report):
-    url_gram = telurl + "sendMessage?text={}&chat_id={}".format(report, chat_id)
-    response = requests.get(url_gram)
-    if response:
-        response.content.decode("utf8")
-        print("[*] Report have been sent to Telegram!")
+    chunk_size=4096
+    chunks = split_message(report, chunk_size)
+    for chunk in chunks:
+        url_gram = telurl + "sendMessage?text={}&chat_id={}".format(chunk, chat_id)
+        response = requests.get(url_gram)
+        if response:
+            response.content.decode("utf8")
+            print("[*] Report have been sent to Telegram!")
 
-    else:
-        print("[!] Connection to Telegram failed! Check your token or chat id.")
+        else:
+            print("[!] Connection to Telegram failed! Check your token or chat id.")
 
 # Posting to a Microsoft Teams channel
 def send_teams_report(report):
